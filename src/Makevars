@@ -1,0 +1,4 @@
+CXX= clang++
+CXX_STD= CXX14
+PKG_CPPFLAGS= -Wc++11-extensions -I../inst/include/ -I/../inst/include/Eigen  
+PKG_LIBS= $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) -L/../inst/include/libceres.a

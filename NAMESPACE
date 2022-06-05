@@ -1,0 +1,3 @@
+useDynLib(ceres, .registration=TRUE)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
