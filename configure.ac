@@ -75,6 +75,7 @@ if test x"${need_to_build}" != x"no"; then
     ## cmake_call.sh installs into ceres/lib, headers are copied
     ceres_include=""
     ceres_libs="ceres/lib/libceres.a"
+    ##ceres_libs="-L./ceres/lib/ -lceres"
 fi
 
 ## Now use all the values

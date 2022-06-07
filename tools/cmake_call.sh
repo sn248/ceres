@@ -25,17 +25,8 @@ mkdir ceres-build
 mkdir ceres
 cd ceres-build
 ${CMAKE_BIN} \
-###  -D BUILD_SHARED_LIBS=OFF \
-###  -D CMAKE_BUILD_TYPE=Release \
-###  -D CMAKE_INSTALL_PREFIX=../nlopt \
-###  -D NLOPT_CXX=ON \
-###  -D NLOPT_GUILE=OFF \
-###  -D NLOPT_MATLAB=OFF \
-###  -D NLOPT_OCTAVE=OFF \
-###  -D NLOPT_PYTHON=OFF \
-###  -D NLOPT_SWIG=OFF \
-###  -D NLOPT_TESTS=OFF \
-###  ${CMAKE_ADD_AR} ${CMAKE_ADD_RANLIB} ../ceres-src
+  -D BUILD_SHARED_LIBS=OFF \
+  -D CMAKE_INSTALL_PREFIX=../ceres \
   -D CMAKE_BUILD_TYPE=Release \
   -D CXSPARSE=OFF \
   -D ACCELERATESPARSE=OFF \

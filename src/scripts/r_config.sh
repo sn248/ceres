@@ -1,4 +1,6 @@
 #### R CONFIGURATION ####
+#### SN - replaced CXX11 with CXX17 
+#### as ceres-solver requires a fully C++17-compliant compiler 
 
 R_ARCH_BIN=$1
 
@@ -14,13 +16,13 @@ CFLAGS="$CPPFLAGS $CPICFLAGS $CFLAGS"
 echo set CFLAGS=$CFLAGS
 export CFLAGS
 
-CXX=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX11`
+CXX=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX17`
 echo set CXX=$CXX
 export CXX
 
-CXXSTD=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX11STD`
-CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX11FLAGS`
-CXXPICFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX11PICFLAGS`
+CXXSTD=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX17STD`
+CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX17FLAGS`
+CXXPICFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX17PICFLAGS`
 
 CXXFLAGS="$CXXSTD $CPPFLAGS $CXXPICFLAGS $CXXFLAGS"
 echo set CXXFLAGS=$CXXFLAGS
