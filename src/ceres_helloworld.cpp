@@ -16,7 +16,7 @@
 //
 
 #include <ceres/ceres.h>
-#include <glog/logging.h>
+// #include <glog/logging.h>
 
 using ceres::AutoDiffCostFunction;
 using ceres::CostFunction;
@@ -61,7 +61,7 @@ int ceres_helloworld(){
 	Solver::Summary summary;
 	Solve(options, &problem, &summary);
 
-	std::cout << summary.BriefReport() << "\n";
-	std::cout << "x : " << initial_x << " -> " << x << "\n";
+	Rcpp::Rcout << summary.BriefReport() << "\n";
+	Rcpp::Rcout << "x : " << initial_x << " -> " << x << "\n";
 	return 0;
 }

@@ -55,8 +55,8 @@ add_library(Ceres::ceres STATIC IMPORTED)
 
 set_target_properties(Ceres::ceres PROPERTIES
   INTERFACE_COMPILE_FEATURES "cxx_std_14"
-  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "Threads::Threads;glog::glog;gflags;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks/Accelerate.framework;\$<LINK_ONLY:-lm>;\$<LINK_ONLY:-ldl>;Eigen3::Eigen"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/ceres/internal/miniglog;${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "Threads::Threads;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks/Accelerate.framework;\$<LINK_ONLY:-lm>;\$<LINK_ONLY:-ldl>;Eigen3::Eigen"
 )
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)
