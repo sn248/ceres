@@ -18,6 +18,8 @@
 #include <ceres/ceres.h>
 // #include <glog/logging.h>
 
+using namespace Rcpp;
+
 using ceres::AutoDiffCostFunction;
 using ceres::CostFunction;
 using ceres::Problem;
@@ -37,13 +39,13 @@ struct CostFunctor {
 };
 
 // [[Rcpp::export]]
-int ceres_helloworld(){
+int ceres_helloworld(double x){
 // int main(int argc, char** argv) {
 	//google::InitGoogleLogging(argv[0]);
 	
 	// The variable to solve for with its initial value. It will be
 	// mutated in place by the solver.
-	double x = 0.5;
+	// double x = xin;
 	const double initial_x = x;
 	
 	// Build the problem.

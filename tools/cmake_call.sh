@@ -9,6 +9,11 @@ cd src
 #### CMAKE CONFIGURATION ####
 . ./scripts/cmake_config.sh
 
+# compile gflags from source
+# sh ./scripts/gflags_download.sh ${RSCRIPT_BIN}
+
+# compile glog from source
+
 # Compile ceres from source
 sh ./scripts/ceres_download.sh ${RSCRIPT_BIN}
 dot() { file=$1; shift; . "$file"; }
