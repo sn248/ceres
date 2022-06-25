@@ -14,7 +14,7 @@ Following the example provided by [Ceres Solver](http://ceres-solver.org/), let'
 $$ f(x) = (10 - x)^{2}$$
 The minima of this function is 0 (at $x = 10$).
 
-See the documentation [here](hhttp://ceres-solver.org/nnls_tutorial.html#hello-world) to see the `C++` implementation of this problem and it's solution. 
+See the documentation [here](http://ceres-solver.org/nnls_tutorial.html#hello-world) to see the `C++` implementation of this problem and it's solution. 
 
 Using the example code from the link above, the same problem can be solved in `R` using the code below. Paste this code in a file and save with `.cpp` extension. Use `Rcpp::sourceCpp()` function (with `<filename>`) as the argument of the `Source`  button in `RStudio` to generate a function `ceres_helloworld` in the `R` environment.
 
