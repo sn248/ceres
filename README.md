@@ -5,7 +5,7 @@
 ## Installing `ceres`
 `ceres` package is not on `CRAN` yet. It can be installed in `R` from github using the following command in the `R` console.
 
-```
+```R
 devtools::install_github('sn248/ceres')
 ```
 
@@ -18,7 +18,7 @@ See the documentation [here](hhttp://ceres-solver.org/nnls_tutorial.html#hello-w
 
 Using the example code from the link above, the same problem can be solved in `R` using the code below. Paste this code in a file and save with `.cpp` extension. Use `Rcpp::sourceCpp()` function (with `<filename>`) as the argument of the `Source`  button in `RStudio` to generate a function `ceres_helloworld` in the `R` environment.
 
-```
+```R
 #include <ceres.h>
 
 // [[Rcpp::depends(RcppEigen, ceres)]]
