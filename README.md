@@ -1,6 +1,6 @@
 # `ceres`
 
-`ceres` is an `R` package. `ceres` is an interface to the [Ceres Solver](http://ceres-solver.org/), an open source `C++` library for modeling and solving large non-linear, least squares optimization problems by Google. Ceres solver has been used in production at Google since 2010.
+`ceres` is an `R` package. `ceres` is an interface to the [Ceres Solver](http://ceres-solver.org/), an open source `C++` library for modeling and solving large, non-linear, least squares optimization problems by Google. Ceres solver has been used in production at Google since 2010.
 
 ## Installing `ceres`
 `ceres` package is not on `CRAN` yet. It can be installed in `R` from github using the following command in the `R` console.
@@ -11,10 +11,10 @@ devtools::install_github('sn248/ceres')
 
 ## How to use `ceres`
 Following the example provided by [Ceres Solver](http://ceres-solver.org/), let's solve the simple optimization problem of finding the minima of the function
-$$ f(x) = (10 - x)^{2}$$
+$$ f(x) = 0.5 \times (10 - x)^{2}$$
 The minima of this function is 0 (at $x = 10$).
 
-See the documentation [here](http://ceres-solver.org/nnls_tutorial.html#hello-world) to see the `C++` implementation of this problem and it's solution. 
+See the documentation [here](http://ceres-solver.org/nnls_tutorial.html#hello-world) to see the `C++` implementation of this problem and its solution. 
 
 Using the example code from the link above, the same problem can be solved in `R` using the code below. Paste this code in a file and save with `.cpp` extension. Use `Rcpp::sourceCpp()` function (with `<filename>`) as the argument of the `Source`  button in `RStudio` to generate a function `ceres_helloworld` in the `R` environment.
 
