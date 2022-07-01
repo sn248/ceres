@@ -615,6 +615,8 @@ PACKAGE_URL=''
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 CERES_LIBS
+GLOG_LIBS
+GFLAGS_LIBS
 CERES_CPPFLAGS
 have_cmake
 CXXCPP
@@ -3279,12 +3281,23 @@ printf "%s\n" "using ceres via local cmake build on ${machine} " >&6; }
     tools/cmake_call.sh
     ## cmake_call.sh installs into ceres/lib, headers are copied
     ceres_include=""
-    ##ceres_libs="ceres/lib/libceres.a"
-    ceres_libs="-L./ceres/lib/ -lceres"
+    ##gflags_libs="-L./gflags/lib/ -lgflags"
+    gflags_libs="../inst/libgflags.a ../inst/libgflags_nothreads.a"
+    ##gflags_libs="-lgflags"
+    ##glog_libs="L./glog/lib/ -lglog"
+    ##glog_libs="-lglog"
+    glog_libs="../inst/libglog.a"
+    ceres_libs="../inst/libceres.a"
+    ##ceres_libs="-lceres"
+    ##ceres_libs="-L./ceres/lib/ -lceres"
 fi
 
 ## Now use all the values
 CERES_CPPFLAGS="$ceres_include"
+
+GFLAGS_LIBS="$gflags_libs"
+
+GLOG_LIBS="$glog_libs"
 
 CERES_LIBS="$ceres_libs"
 

@@ -2,6 +2,6 @@
 
 RSCRIPT_BIN=$1
 
-# Uncompress ceres-solver source
-${RSCRIPT_BIN} -e "utils::untar(tarfile = 'ceres-solver-2.1.0.tar.gz')"
-mv ceres-solver-2.1.0 ceres-src
+# Uncompress gflags source
+${RSCRIPT_BIN} -e "utils::untar(tarfile = 'gflags-2.2.2-source.tar.gz')"
+mv gflags gflags-src

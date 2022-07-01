@@ -1,3 +1,4 @@
 CXX_STD = CXX17
 PKG_CPPFLAGS = -I../inst/include 
-PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) -L./ceres/lib/ -lceres
+PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) -L../inst/ ../inst/libceres.a ../inst/libgflags.a ../inst/libgflags_nothreads.a ../inst/libglog.a
+LIBS=-L./ -L../inst/
