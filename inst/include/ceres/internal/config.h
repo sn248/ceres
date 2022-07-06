@@ -45,7 +45,7 @@
 // #define CERES_USE_EIGEN_SPARSE
 
 // If defined, Ceres was compiled without LAPACK.
-// #define CERES_NO_LAPACK
+#define CERES_NO_LAPACK
 
 // If defined, Ceres was compiled without SuiteSparse.
 #define CERES_NO_SUITESPARSE

@@ -9,6 +9,31 @@ cd src
 #### CMAKE CONFIGURATION ####
 . ./scripts/cmake_config.sh
 
+# complile eigen from source ###################################################
+sh ./scripts/eigen_download.sh ${RSCRIPT_BIN}
+dot() { file=$1; shift; . "$file"; }
+dot ./scripts/r_config.sh ""
+${RSCRIPT_BIN} --vanilla -e 'getRversion() > "4.0.0"' | grep TRUE > /dev/null
+if [ $? -eq 0 ]; then
+  CMAKE_ADD_AR="-D CMAKE_AR=${AR}"
+  CMAKE_ADD_RANLIB="-D CMAKE_RANLIB=${RANLIB}"
+else
+  CMAKE_ADD_AR=""
+  CMAKE_ADD_RANLIB=""
+fi
+mkdir eigen-build
+mkdir eigen
+cd eigen-build
+${CMAKE_BIN} \
+    -D BUILD_TESTING=OFF \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX=../eigen \
+    -D EIGEN_BUILD_DOC=OFF \
+  ${CMAKE_ADD_AR} ${CMAKE_ADD_RANLIB} ../eigen-src
+make -j${NCORES}
+make install
+cd ..
+
 # compile gflags from source ###################################################
 sh ./scripts/gflags_download.sh ${RSCRIPT_BIN}
 dot() { file=$1; shift; . "$file"; }
@@ -26,12 +51,14 @@ mkdir gflags
 cd gflags-build
 ${CMAKE_BIN} \
     -D CMAKE_BUILD_TYPE=Release \
+    -D BUILD_STATIC_LIBS=ON \
     -D CMAKE_INSTALL_PREFIX=../gflags \
   ${CMAKE_ADD_AR} ${CMAKE_ADD_RANLIB} ../gflags-src
 make -j${NCORES}
 make install
 cd ..
-##mv gflags/lib* gflags/lib
+mv gflags/lib* gflags/lib
+##mv gflags/lib/* ../inst/
 
 # compile glog from source #####################################################
 sh ./scripts/glog_download.sh ${RSCRIPT_BIN}
@@ -61,7 +88,8 @@ ${CMAKE_BIN} \
 make -j${NCORES}
 make install
 cd ..
-##mv glog/lib* glog/lib
+mv glog/lib* glog/lib
+## mv glog/lib/* ../inst/
 
 # Compile ceres from source ####################################################
 sh ./scripts/ceres_download.sh ${RSCRIPT_BIN}
@@ -93,13 +121,16 @@ ${CMAKE_BIN} \
   -D BUILD_EXAMPLES=OFF \
   -D BUILD_BENCHMARKS=OFF \
   -D BUILD_TESTING=OFF \
+  -D LAPACK=OFF \
+  -D Eigen3_DIR=../eigen/share/eigen3/cmake \
   -D gflags_DIR=../gflags/lib/cmake/gflags \
   -D glog_DIR=../glog/lib/cmake/glog \
   ${CMAKE_ADD_AR} ${CMAKE_ADD_RANLIB} ../ceres-src
 make -j${NCORES}
 make install
 cd ..
-##mv ceres/lib* ceres/lib
+mv ceres/lib* ceres/lib
+##mv ceres/lib/* ../inst/
 
 # Cleanup
 sh ./scripts/ceres_cleanup.sh

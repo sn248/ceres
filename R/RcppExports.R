@@ -5,10 +5,6 @@ ceres_helloworld <- function(x) {
     .Call(`_ceres_ceres_helloworld`, x)
 }
 
-rcpp_hello_world <- function() {
-    .Call(`_ceres_rcpp_hello_world`)
-}
-
 rcppeigen_hello_world <- function() {
     .Call(`_ceres_rcppeigen_hello_world`)
 }

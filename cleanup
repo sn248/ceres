@@ -1,4 +1,4 @@
 #! /bin/sh
 
-rm -fr src/*.o src/*.so autom4te.cache config.log config.status
+rm -fr src/*.o src/*.so autom4te.cache config.log config.status inst/*.a
 rm -f configure~

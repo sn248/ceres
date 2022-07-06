@@ -24,7 +24,7 @@ Using the example code from the link above, the same problem can be solved in `R
 // [[Rcpp::depends(RcppEigen, ceres)]]
 
 #include <ceres/ceres.h>
-// #include <glog/logging.h>
+#include <glog/logging.h>
 
 using namespace Rcpp;
 
