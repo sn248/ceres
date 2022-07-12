@@ -26,7 +26,7 @@ if test -z "${CXX}"; then
 fi
 CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXXFLAGS`
 CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
-CXX11FLAGS=`"${R_HOME}/bin/R" CMD config CXX11FLAGS`
+CXX17FLAGS=`"${R_HOME}/bin/R" CMD config CXX17FLAGS`
 AC_LANG(C++)
 AC_REQUIRE_CPP
 AC_PROG_CXX
