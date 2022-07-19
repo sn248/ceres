@@ -5,19 +5,3 @@ ceres_helloworld <- function(x) {
     .Call(`_ceres_ceres_helloworld`, x)
 }
 
-rcppeigen_hello_world <- function() {
-    .Call(`_ceres_rcppeigen_hello_world`)
-}
-
-rcppeigen_outerproduct <- function(x) {
-    .Call(`_ceres_rcppeigen_outerproduct`, x)
-}
-
-rcppeigen_innerproduct <- function(x) {
-    .Call(`_ceres_rcppeigen_innerproduct`, x)
-}
-
-rcppeigen_bothproducts <- function(x) {
-    .Call(`_ceres_rcppeigen_bothproducts`, x)
-}
-

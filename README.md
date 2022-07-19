@@ -48,7 +48,7 @@ struct CostFunctor {
 
 // [[Rcpp::export]]
 int ceres_helloworld(double x){
-	// int main(int argc, char** argv) {
+
 	//google::InitGoogleLogging(argv[0]);
 	
 	// The variable to solve for with its initial value. It will be
@@ -77,7 +77,7 @@ int ceres_helloworld(double x){
 }
 
 ```
-**NOTE** - Compilation of this code will give a list of `Eigen` related warnings in `R`, so they can be neglected.
+**NOTE** - Compilation of this code will give a list of `Eigen` related warnings in `R`, which can be neglected for now.
 
 Finally, the `ceres_helloworld` function can be called in `R` using a numeric argument, e.g.,
 ```

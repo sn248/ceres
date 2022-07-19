@@ -1,15 +1,14 @@
 Package: ceres
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
-Version: 1.0
-Date: 2020-07-01
-Author: Your Name
-Maintainer: SN <sn248@cornell.edu>
-Description: One paragraph description of what the package does as one
+Title: An Interface to 'Ceres Solver' Linear Optimization
+Version: 0.1.0
+Date: 2022-07-13
+Author: Satyaprakash Nayak
+Maintainer: Satyaprakas Nayak <sn248@cornell.edu>
+Description: Provides a way to interface with the Ceres Solver (http://ceres-solver.org/index.html) library. Ceres Solver is a C++ library open source C++ library for modeling and solving large, complicated optimization problems. It can be used to solve Non-linear Least Squares problems with bounds constraints and general unconstrained optimization problems. It is a mature, feature rich, and performant library that has been used in production at Google since 2010. This package provides a way to interface with optimization routines in Ceres via R.
         or more full sentences.
 License: GPL (>= 2)
 SystemRequirements: cmake (>= 3.2.0) which is used only on Linux or macOS 
-    systems when no system build of ceres can be found.
 Biarch: true
 Encoding: UTF-8
 Imports: 
