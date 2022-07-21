@@ -74,14 +74,14 @@ if test x"${need_to_build}" != x"no"; then
     tools/cmake_call.sh
     ## cmake_call.sh installs into ceres/lib, headers are copied
     ceres_include=""
-    ##gflags_libs="-lgflags -lgflags_nothreads"
-    gflags_libs="../inst/libgflags.a ../inst/libgflags_nothreads.a"
+    gflags_libs="-lgflags -lgflags_nothreads"
+    ##gflags_libs="../inst/libgflags.a ../inst/libgflags_nothreads.a"
     ##gflags_libs="-lgflags"
     ##glog_libs="L./glog/lib/ -lglog"
-    ##glog_libs="-lglog"
-    glog_libs="../inst/libglog.a"
-    ceres_libs="../inst/libceres.a"
-    ##ceres_libs="-lceres"
+    glog_libs="-lglog"
+    ##glog_libs="../inst/libglog.a"
+    ##ceres_libs="../inst/libceres.a"
+    ceres_libs="-lceres"
     ##ceres_libs="-L./ceres/lib/ -lceres"
 fi
 
