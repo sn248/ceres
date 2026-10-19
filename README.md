@@ -97,3 +97,46 @@ x : 0.5 -> 10
 ```
 
 which is same answer that we get using the `C++` library (see [here](http://ceres-solver.org/nnls_tutorial.html#hello-world)).
+
+## Writing your own problems in `C++`
+
+Any `.cpp` file containing `// [[Rcpp::depends(ceres)]]` and `#include <ceres.h>` can be compiled with `Rcpp::sourceCpp()`. The `ceres` plugin adds the include paths, links the bundled Ceres, glog and gflags static libraries, and selects `C++17`.
+
+### Automatic differentiation
+Write each residual as a functor with a templated `operator()` and wrap it in `ceres::AutoDiffCostFunction`. Ceres then computes exact derivatives, so no Jacobian has to be written by hand (see the `CostFunctor` above).
+
+### Multi-threading
+Set `options.num_threads` on `ceres::Solver::Options`. Ceres evaluates residuals and Jacobians, and parts of the linear solver, on that many threads. Because cost functors run on worker threads, they must not touch `R`: no `Rcpp` vectors, `Rcpp::stop()` or `Rprintf()` inside `operator()`. Copy the data into `std::vector` or `Eigen` objects before calling `ceres::Solve()`. Threads only pay off when residuals are expensive or the problem is large; for cheap residuals the thread overhead can make the solve slower.
+
+### Sparse problems
+Ceres is built with Eigen's sparse linear algebra, so `SPARSE_NORMAL_CHOLESKY` and `SPARSE_SCHUR` are available with `options.sparse_linear_algebra_library_type = ceres::EIGEN_SPARSE`. SuiteSparse, LAPACK and CUDA are not used.
+
+### Examples
+Two complete examples are installed with the package:
+
+* `curve_fitting.cpp`: fits `y = exp(m * x + c)` to data from `R` using automatic differentiation and `num_threads`.
+* `robust_smoothing.cpp`: smooths a signal with outliers using a Cauchy loss, one parameter block per point and the sparse Cholesky solver.
+
+```R
+Rcpp::sourceCpp(system.file("examples", "curve_fitting.cpp", package = "ceres"))
+set.seed(1)
+x <- seq(0, 5, length.out = 10000)
+y <- exp(0.3 * x + 0.1) + rnorm(length(x), sd = 0.2)
+fit_exponential(x, y, num_threads = 4)
+
+Rcpp::sourceCpp(system.file("examples", "robust_smoothing.cpp", package = "ceres"))
+t <- seq(0, 4 * pi, length.out = 20000)
+y <- sin(t) + rnorm(length(t), sd = 0.1)
+out <- sample(length(t), 500)
+y[out] <- y[out] + rnorm(500, sd = 3)
+fit <- robust_smooth(y, lambda = 50, num_threads = 4)
+plot(t, y, pch = ".", ylim = c(-2, 2)); lines(t, fit$s, col = "red")
+```
+
+### Using `ceres` from another package
+Add `ceres`, `RcppEigen` and `Rcpp` to `LinkingTo` (and `Rcpp` to `Imports`) in `DESCRIPTION`, and put this in `src/Makevars`:
+
+```
+CXX_STD = CXX17
+PKG_LIBS = $(shell "${R_HOME}/bin/Rscript" -e "ceres::LdFlags()")
+```

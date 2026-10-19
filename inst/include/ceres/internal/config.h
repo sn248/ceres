@@ -42,7 +42,7 @@
 #define CERES_PUBLIC_INTERNAL_CONFIG_H_
 
 // If defined, use the LGPL code in Eigen.
-// #define CERES_USE_EIGEN_SPARSE
+#define CERES_USE_EIGEN_SPARSE
 
 // If defined, Ceres was compiled without LAPACK.
 #define CERES_NO_LAPACK

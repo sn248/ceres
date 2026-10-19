@@ -1,10 +1,9 @@
 #!/bin/sh
 
-cp gflags/lib/*.a ../inst/
-cp gflags/lib/*.so ../inst/
-cp glog/lib/*.a ../inst/
-cp glog/lib/*.so ../inst/
-cp ceres/lib/*.a ../inst/
+mkdir -p ../inst/lib
+cp gflags/lib/*.a ../inst/lib/
+cp glog/lib/*.a ../inst/lib/
+cp ceres/lib/*.a ../inst/lib/
 
 cp -R eigen/include/* ../inst/include/
 cp -R glog/include/* ../inst/include/
