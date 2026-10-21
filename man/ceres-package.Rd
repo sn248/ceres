@@ -3,32 +3,40 @@
 \alias{ceres}
 \docType{package}
 \title{
-  A short title line describing what the package does
+  An Interface to 'Ceres Solver'
 }
 \description{
-  A more detailed description of what the package does. A length
-  of about one to five lines is recommended.
+  Bundles the 'Ceres Solver' C++ library for non-linear least squares and
+  general unconstrained optimization, built from source with Eigen from
+  \pkg{RcppEigen}, and makes it available to \code{C++} code compiled
+  with \pkg{Rcpp}.
 }
 \details{
-  This section should provide a more detailed overview of how to use the
-  package, including the most important functions.
+  A \code{.cpp} file containing \code{// [[Rcpp::depends(ceres)]]} and
+  \code{#include <ceres.h>} can be compiled with
+  \code{\link[Rcpp]{sourceCpp}}; see the files in
+  \code{system.file("examples", package = "ceres")}. Other packages can
+  link to Ceres with the flags from \code{\link{CxxFlags}} and
+  \code{\link{LdFlags}}.
+
+  Ceres is built with its own minimal logging library (\sQuote{miniglog})
+  in place of glog and gflags. Log messages are printed with
+  \code{REprintf()}, and fatal errors (e.g. a failed \code{CHECK}) throw a
+  \code{C++} exception that \pkg{Rcpp} turns into an R error.
 }
 \author{
-Your Name, email optional.
+Satyaprakash Nayak.
 
-Maintainer: Your Name <your@email.com>
+Maintainer: Satyaprakash Nayak <sn248@cornell.edu>
 }
 \references{
-  This optional section can contain literature or other references for
-  background information.
+  Sameer Agarwal, Keir Mierle and The Ceres Solver Team.
+  Ceres Solver. \url{http://ceres-solver.org/}
 }
 \keyword{ package }
 \seealso{
-  Optional links to other man pages
+  \code{\link{ceres_helloworld}}, \code{\link{CxxFlags}}
 }
 \examples{
-  \dontrun{
-     ## Optional simple examples of the most important functions
-     ## These can be in \dontrun{} and \donttest{} blocks.   
-  }
+ceres_helloworld(0.5)
 }

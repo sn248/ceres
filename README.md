@@ -100,7 +100,7 @@ which is same answer that we get using the `C++` library (see [here](http://cere
 
 ## Writing your own problems in `C++`
 
-Any `.cpp` file containing `// [[Rcpp::depends(ceres)]]` and `#include <ceres.h>` can be compiled with `Rcpp::sourceCpp()`. The `ceres` plugin adds the include paths, links the bundled Ceres, glog and gflags static libraries, and selects `C++17`.
+Any `.cpp` file containing `// [[Rcpp::depends(ceres)]]` and `#include <ceres.h>` can be compiled with `Rcpp::sourceCpp()`. The `ceres` plugin adds the include paths, links the bundled Ceres static library (built with its own miniglog in place of glog and gflags), and selects `C++17`.
 
 ### Automatic differentiation
 Write each residual as a functor with a templated `operator()` and wrap it in `ceres::AutoDiffCostFunction`. Ceres then computes exact derivatives, so no Jacobian has to be written by hand (see the `CostFunctor` above).

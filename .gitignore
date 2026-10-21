@@ -10,3 +10,5 @@ config.log
 config.status
 inst/lib/
 src/Makevars
+inst/include/ceres/
+inst/include/glog/

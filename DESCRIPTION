@@ -1,18 +1,31 @@
 Package: ceres
 Type: Package
-Title: An Interface to 'Ceres Solver' Linear Optimization
+Title: An Interface to 'Ceres Solver' for Non-Linear Least Squares and Optimization
 Version: 0.1.0
-Date: 2022-07-13
-Author: Satyaprakash Nayak
-Maintainer: Satyaprakas Nayak <sn248@cornell.edu>
-Description: Provides a way to interface with the Ceres Solver (http://ceres-solver.org/index.html) library. Ceres Solver is a C++ library open source C++ library for modeling and solving large, complicated optimization problems. It can be used to solve Non-linear Least Squares problems with bounds constraints and general unconstrained optimization problems. It is a mature, feature rich, and performant library that has been used in production at Google since 2010. This package provides a way to interface with optimization routines in Ceres via R.
-        or more full sentences.
+Date: 2026-10-21
+Authors@R: c(
+    person("Satyaprakash", "Nayak", role = c("aut", "cre"),
+           email = "sn248@cornell.edu"),
+    person("Google Inc.", role = "cph",
+           comment = "Ceres Solver, bundled in src/ceres-solver-2.2.0.tar.gz"),
+    person("Ceres Solver authors", role = "ctb",
+           comment = "Ceres Solver, bundled in src/ceres-solver-2.2.0.tar.gz"))
+Description: Provides an interface to the 'Ceres Solver' C++ library
+    <http://ceres-solver.org/>. 'Ceres Solver' is an open source library for
+    modeling and solving large, complicated optimization problems. It can solve
+    non-linear least squares problems with bounds constraints and general
+    unconstrained optimization problems. It is a mature, feature rich and
+    performant library that has been used in production at Google since 2010.
+    The bundled library is built from source and can be used from R through
+    'Rcpp', either with Rcpp::sourceCpp() or from other packages.
 License: GPL (>= 2)
-SystemRequirements: cmake (>= 3.2.0) which is used only on Linux or macOS 
+Copyright: The bundled 'Ceres Solver' sources are Copyright 2023 Google Inc.
+    and distributed under the BSD 3-clause license; see the LICENSE file in
+    src/ceres-solver-2.2.0.tar.gz.
+SystemRequirements: cmake (>= 3.16), GNU make
 Biarch: true
 Encoding: UTF-8
 Imports: 
-    Rcpp,
-    RcppEigen
+    Rcpp
 LinkingTo: Rcpp, RcppEigen
 RoxygenNote: 7.2.0

@@ -17,9 +17,9 @@ CxxFlags <- function(print = TRUE) {
 }
 
 LdFlags <- function(print = TRUE) {
-    ## link the static archives directly so a shared libglog or
-    ## libgflags on the system can never be picked up instead
-    libs <- file.path(.ceresLibDir(), c("libceres.a", "libglog.a", "libgflags.a"))
+    ## link the static archive directly so a shared libceres on the
+    ## system can never be picked up instead
+    libs <- file.path(.ceresLibDir(), "libceres.a")
     flags <- paste(c(shQuote(libs), "-lpthread"), collapse = " ")
     if (print) cat(flags)
     invisible(flags)

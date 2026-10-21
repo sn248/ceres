@@ -61,7 +61,7 @@ need_to_build="yes"
 ## So do we need to build
 if test x"${need_to_build}" != x"no"; then
     AC_PATH_PROG(have_cmake, cmake, no)
-    if test x"${have_cmake}" == x"no"; then
+    if test x"${have_cmake}" = x"no"; then
        . src/scripts/cmake_config.sh
        if test -z "${CMAKE_BIN}"; then
           ## also error to end configure here
@@ -71,24 +71,15 @@ if test x"${need_to_build}" != x"no"; then
     ## 'uname -m' on M1 give x86_64 which is ... not helping
     machine=`"${R_HOME}/bin/Rscript" -e 'cat(Sys.info()[["machine"]])'`
     AC_MSG_RESULT([using ceres via local cmake build on ${machine} ])
-    tools/cmake_call.sh
-    ## cmake_call.sh installs into ceres/lib, headers are copied
+    tools/cmake_call.sh || AC_MSG_ERROR([Building the bundled Ceres Solver failed.])
+    ## cmake_call.sh installs libceres.a into inst/lib and the headers
+    ## (including miniglog's glog/logging.h) into inst/include
     ceres_include=""
-    gflags_libs="-lgflags -lgflags_nothreads"
-    ##gflags_libs="../inst/libgflags.a ../inst/libgflags_nothreads.a"
-    ##gflags_libs="-lgflags"
-    ##glog_libs="L./glog/lib/ -lglog"
-    glog_libs="-lglog"
-    ##glog_libs="../inst/libglog.a"
-    ##ceres_libs="../inst/libceres.a"
     ceres_libs="-lceres"
-    ##ceres_libs="-L./ceres/lib/ -lceres"
 fi
 
 ## Now use all the values
 AC_SUBST([CERES_CPPFLAGS],["$ceres_include"])
-AC_SUBST([GFLAGS_LIBS],["$gflags_libs"])
-AC_SUBST([GLOG_LIBS],["$glog_libs"])
 AC_SUBST([CERES_LIBS],["$ceres_libs"])
 AC_CONFIG_FILES([src/Makevars])
 AC_OUTPUT

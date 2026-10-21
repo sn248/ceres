@@ -1,6 +1,8 @@
 #### R CONFIGURATION ####
 #### SN - replaced CXX11 with CXX17 
 #### as ceres-solver requires a fully C++17-compliant compiler 
+#### -g0 overrides the -g in R's flags: debug info would make the
+#### static libceres.a ~400Mb instead of ~7Mb and slows compilation
 
 R_ARCH_BIN=$1
 
@@ -12,7 +14,7 @@ CPPFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPPFLAGS`
 CFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CFLAGS`
 CPICFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPICFLAGS`
 
-CFLAGS="$CPPFLAGS $CPICFLAGS $CFLAGS"
+CFLAGS="$CPPFLAGS $CPICFLAGS $CFLAGS -g0"
 echo set CFLAGS=$CFLAGS
 export CFLAGS
 
@@ -24,7 +26,7 @@ CXXSTD=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX17STD`
 CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX17FLAGS`
 CXXPICFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX17PICFLAGS`
 
-CXXFLAGS="$CXXSTD $CPPFLAGS $CXXPICFLAGS $CXXFLAGS"
+CXXFLAGS="$CXXSTD $CPPFLAGS $CXXPICFLAGS $CXXFLAGS -g0"
 echo set CXXFLAGS=$CXXFLAGS
 export CXXFLAGS
 

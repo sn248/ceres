@@ -1,5 +1,5 @@
 #! /bin/sh
 
-rm -fr src/*.o src/*.so autom4te.cache config.log config.status inst/lib
+rm -fr src/*.o src/*.so autom4te.cache config.log config.status inst/lib inst/include/ceres inst/include/glog
 rm -f configure~
 rm -f src/Makevars
