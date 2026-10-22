@@ -5,7 +5,7 @@ Version: 0.1.0
 Date: 2026-10-21
 Authors@R: c(
     person("Satyaprakash", "Nayak", role = c("aut", "cre"),
-           email = "sn248@cornell.edu"),
+           email = "satyaprakash.nayak@gmail.com"),
     person("Google Inc.", role = "cph",
            comment = "Ceres Solver, bundled in src/ceres-solver-2.2.0.tar.gz"),
     person("Ceres Solver authors", role = "ctb",

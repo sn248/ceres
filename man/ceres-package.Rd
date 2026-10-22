@@ -27,7 +27,7 @@
 \author{
 Satyaprakash Nayak.
 
-Maintainer: Satyaprakash Nayak <sn248@cornell.edu>
+Maintainer: Satyaprakash Nayak <satyaprakash.nayak@gmail.com>
 }
 \references{
   Sameer Agarwal, Keir Mierle and The Ceres Solver Team.
