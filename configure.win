@@ -1,0 +1,22 @@
+#! /bin/sh
+##
+## Windows counterpart of configure: builds the bundled Ceres Solver with
+## the cmake and make from Rtools. src/Makevars.win has the fixed flags.
+
+: ${R_HOME=$(R RHOME)}
+
+. src/scripts/cmake_config.sh
+if test -z "${CMAKE_BIN}"; then
+    echo "Could not find 'cmake'; it is included in Rtools 4.x." >&2
+    exit 1
+fi
+
+## Rtools' make is an MSYS make; without this CMake picks a Visual Studio
+## or NMake generator
+CMAKE_GENERATOR="MSYS Makefiles"
+export CMAKE_GENERATOR
+
+tools/cmake_call.sh || {
+    echo "Building the bundled Ceres Solver failed." >&2
+    exit 1
+}

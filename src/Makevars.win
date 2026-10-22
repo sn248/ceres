@@ -1,0 +1,3 @@
+CXX_STD = CXX17
+PKG_CPPFLAGS = -I../inst/include
+PKG_LIBS = -L../inst/lib -lceres $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
