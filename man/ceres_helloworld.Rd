@@ -21,7 +21,7 @@ ceres_helloworld(x)
   for its printed output.
 }
 \references{
-  \url{http://ceres-solver.org/nnls_tutorial.html#hello-world}
+  \url{https://github.com/ceres-solver/ceres-solver/blob/2.2.0/docs/source/nnls_tutorial.rst}
 }
 \examples{
 ceres_helloworld(0.5)

@@ -31,7 +31,7 @@ Maintainer: Satyaprakash Nayak <satyaprakash.nayak@gmail.com>
 }
 \references{
   Sameer Agarwal, Keir Mierle and The Ceres Solver Team.
-  Ceres Solver. \url{http://ceres-solver.org/}
+  Ceres Solver. \url{https://github.com/ceres-solver/ceres-solver}
 }
 \keyword{ package }
 \seealso{

@@ -11,13 +11,14 @@ Authors@R: c(
     person("Ceres Solver authors", role = "ctb",
            comment = "Ceres Solver, bundled in src/ceres-solver-2.2.0.tar.gz"))
 Description: Provides an interface to the 'Ceres Solver' C++ library
-    <http://ceres-solver.org/>. 'Ceres Solver' is an open source library for
-    modeling and solving large, complicated optimization problems. It can solve
-    non-linear least squares problems with bounds constraints and general
-    unconstrained optimization problems. It is a mature, feature rich and
-    performant library that has been used in production at Google since 2010.
-    The bundled library is built from source and can be used from R through
-    'Rcpp', either with Rcpp::sourceCpp() or from other packages.
+    <https://github.com/ceres-solver/ceres-solver>. 'Ceres Solver' is an open
+    source library for modeling and solving large, complicated optimization
+    problems. It can solve non-linear least squares problems with bounds
+    constraints and general unconstrained optimization problems. It is a
+    mature, feature rich and high-performance library that has been used in
+    production at Google since 2010. The bundled library is built from source
+    and can be used from R through 'Rcpp', either with Rcpp::sourceCpp() or
+    from other packages.
 License: GPL (>= 2)
 Copyright: The bundled 'Ceres Solver' sources are Copyright 2023 Google Inc.
     and distributed under the BSD 3-clause license; see the LICENSE file in

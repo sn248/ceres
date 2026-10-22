@@ -62,6 +62,16 @@ perl -0pi -e '
   s{std::cout << summary\.FullReport\(\) << "\\n";}{Rprintf("%s\\n", summary.FullReport().c_str());};
 ' c_api.cc
 
+## Some files use int64_t etc. without <cstdint> and rely on it arriving
+## through other headers, which it does not with Rtools' gcc (file.cc)
+for f in *.cc *.h; do
+    if grep -q '\bu\{0,1\}int\(8\|16\|32\|64\)_t\b' "$f" && \
+       ! grep -q '#include <cstdint>' "$f"; then
+        perl -0pi -e 's{^(#include )}{#include <cstdint>\n$1}m' "$f"
+        grep -q '#include <cstdint>' "$f"
+    fi
+done
+
 ## Fail loudly if upstream changed and a patch no longer applies
 grep -q 'REprintf("%s", stream_.str().c_str());' miniglog/glog/logging.h
 grep -q 'throw std::runtime_error' miniglog/glog/logging.h
