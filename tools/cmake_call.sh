@@ -18,11 +18,26 @@ if test -z "${EIGEN_INCLUDE}"; then
   echo "Could not find the RcppEigen include directory." >&2
   exit 1
 fi
-EIGEN_VERSION=`sed -n \
-  -e 's/^#define EIGEN_WORLD_VERSION \([0-9]*\).*/\1/p' \
-  -e 's/^#define EIGEN_MAJOR_VERSION \([0-9]*\).*/\1/p' \
-  -e 's/^#define EIGEN_MINOR_VERSION \([0-9]*\).*/\1/p' \
-  "${EIGEN_INCLUDE}/Eigen/src/Core/util/Macros.h" | paste -sd. -`
+# Eigen >= 5 has its version in Eigen/Version, as semver MAJOR.MINOR.PATCH (the
+# "WORLD" version stays 3 and is not part of it). Eigen 3.x has it in Macros.h,
+# as WORLD.MAJOR.MINOR.
+if test -f "${EIGEN_INCLUDE}/Eigen/Version"; then
+  EIGEN_VERSION=`sed -n \
+    -e 's/^#define EIGEN_MAJOR_VERSION \([0-9]*\).*/\1/p' \
+    -e 's/^#define EIGEN_MINOR_VERSION \([0-9]*\).*/\1/p' \
+    -e 's/^#define EIGEN_PATCH_VERSION \([0-9]*\).*/\1/p' \
+    "${EIGEN_INCLUDE}/Eigen/Version" | paste -sd. -`
+else
+  EIGEN_VERSION=`sed -n \
+    -e 's/^#define EIGEN_WORLD_VERSION \([0-9]*\).*/\1/p' \
+    -e 's/^#define EIGEN_MAJOR_VERSION \([0-9]*\).*/\1/p' \
+    -e 's/^#define EIGEN_MINOR_VERSION \([0-9]*\).*/\1/p' \
+    "${EIGEN_INCLUDE}/Eigen/src/Core/util/Macros.h" | paste -sd. -`
+fi
+if test -z "${EIGEN_VERSION}"; then
+  echo "Could not determine the Eigen version in ${EIGEN_INCLUDE}." >&2
+  exit 1
+fi
 mkdir -p eigen-cmake
 cat > eigen-cmake/Eigen3Config.cmake <<EOF
 set(Eigen3_VERSION ${EIGEN_VERSION})
