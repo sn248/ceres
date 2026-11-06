@@ -1,6 +1,7 @@
 ## Test environments
 
 * local Ubuntu 26.04, R 4.6.1, GCC 15.2.0, RcppEigen 0.3.4.0.2 (Eigen 3.4.0)
+* Windows: TODO, add the result of the win-builder check before submitting
 
 The package also installs and its tests pass against the development version
 of RcppEigen (0.4.9.9-5, Eigen 5.0.1). With that version, R CMD check gives a
@@ -66,3 +67,7 @@ The copyright holders and licenses of the bundled Ceres Solver sources (BSD
 3-clause, with some files under Apache 2.0 or MIT), and the changes made to
 them, are listed in inst/COPYRIGHTS. tools/trim_ceres.sh reproduces the bundled
 tarball from the upstream release.
+
+The package is licensed under GPL (>= 3) rather than GPL (>= 2) because the
+compiled code includes the Apache-2.0 files, which are compatible with GPL v3
+but not v2.
