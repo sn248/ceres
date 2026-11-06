@@ -1,0 +1,4 @@
+# Keep LF line endings on every platform: R CMD check warns about CRLF in
+# shell scripts and sources, which Git would otherwise create on Windows.
+* text=auto eol=lf
+*.tar.gz binary
