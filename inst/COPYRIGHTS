@@ -3,7 +3,7 @@ Copyright and license information for the 'ceres' R package
 
 The R and C++ code written for this package (R/, inst/include/ceres.h, the build
 scripts, inst/examples/robust_smoothing.cpp) is Copyright Satyaprakash Nayak and
-licensed under GPL (>= 2).
+licensed under GPL (>= 3).
 
 The package bundles a trimmed and patched copy of Ceres Solver 2.2.0 in
 src/ceres-solver-2.2.0.tar.gz. Its headers are installed in include/ceres and

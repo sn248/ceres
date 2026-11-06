@@ -6,9 +6,8 @@
 ##
 ##  Copyright (C) 2022-2026  Satyaprakash Nayak
 ##
-## This file is licensed under the GPL-2 or later just like most of my
-## Open Source code, and is granted an exemption (should it be needed)
-## for inclusion into ceres
+## This file is licensed under the GPL-3 or later, like the rest of the
+## code written for ceres
 
 # require at least autoconf 2.69
 AC_PREREQ([2.69])

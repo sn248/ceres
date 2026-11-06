@@ -37,7 +37,7 @@ Description: Provides an interface to the 'Ceres Solver' C++ library
     production at Google since 2010. The bundled library is built from source
     and can be used from R through 'Rcpp', either with Rcpp::sourceCpp() or
     from other packages.
-License: GPL (>= 2)
+License: GPL (>= 3)
 Copyright: See the file inst/COPYRIGHTS for the copyright holders and licenses
     of the bundled 'Ceres Solver' sources.
 SystemRequirements: cmake (>= 3.16), GNU make
