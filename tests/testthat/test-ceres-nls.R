@@ -126,6 +126,7 @@ test_that("bounds hold and fn is never evaluated outside them", {
         fit <- ceres_nls(recording, c(m = 0.1, c = 0), x = x, y = y,
                          lower = lower, upper = upper),
         "at a bound")
+    expect_true(fit$converged)
     expect_equal(coef(fit)[["m"]], 0.2)
     expect_true(fit$at_bound[["m"]])
     expect_false(fit$at_bound[["c"]])
@@ -156,11 +157,144 @@ test_that("bounds can be scalars, full vectors or named subsets", {
     expect_error(ceres_nls(resid_exp, start, x = x, y = y, lower = 1), "within")
 })
 
-test_that("a parameter with lower == upper stays fixed", {
-    fit <- suppressWarnings(
-        ceres_nls(resid_exp, c(m = 0.25, c = 0), x = x, y = y,
-                  lower = c(m = 0.25), upper = c(m = 0.25)))
+# The optimum of c with m fixed, found without Ceres
+best_c <- function(m, x, y, lower = -5, upper = 5) {
+    optimize(function(c) sum((y - exp(m * x + c))^2), c(lower, upper), tol = 1e-10)$minimum
+}
+
+test_that("a parameter at a bound does not stop the others reaching their optimum", {
+    # plain Ceres reports convergence here with c about 5% away from the optimum
+    for (jac in list(NULL, jac_exp)) {
+        for (method in c("lm", "dogleg")) {
+            fit <- suppressWarnings(
+                ceres_nls(resid_exp, c(m = 0.1, c = 0), jac = jac, x = x, y = y,
+                          upper = c(m = 0.2), control = ceres_control(method = method)))
+            expect_true(fit$converged)
+            expect_equal(fit$status, "CONVERGENCE")
+            expect_equal(coef(fit)[["m"]], 0.2)
+            expect_equal(coef(fit)[["c"]], best_c(0.2, x, y), tolerance = 1e-5)
+        }
+    }
+    # lower bound, and the starting value on the bound
+    fit <- suppressWarnings(ceres_nls(resid_exp, c(m = 0.5, c = 0), x = x, y = y,
+                                      lower = c(m = 0.4)))
+    expect_true(fit$converged)
+    expect_equal(coef(fit)[["c"]], best_c(0.4, x, y), tolerance = 1e-5)
+    fit <- suppressWarnings(ceres_nls(resid_exp, c(m = 0.2, c = 0), x = x, y = y,
+                                      upper = c(m = 0.2)))
+    expect_true(fit$converged)
+    expect_equal(coef(fit)[["c"]], best_c(0.2, x, y), tolerance = 1e-5)
+})
+
+test_that("bounded fits with a robust loss reach the constrained optimum", {
+    y_out <- y
+    y_out[c(10, 40, 70, 90)] <- y_out[c(10, 40, 70, 90)] + 8
+    a <- 0.2
+    cauchy_cost <- function(c) {
+        0.5 * sum(a^2 * log(1 + (y_out - exp(0.2 * x + c))^2 / a^2))
+    }
+    exact <- optimize(cauchy_cost, c(0, 1), tol = 1e-10)
+    fit <- suppressWarnings(suppressMessages(
+        ceres_nls(resid_exp, c(m = 0.1, c = 0.3), x = x, y = y_out, upper = c(m = 0.2),
+                  loss = "cauchy", loss_scale = a)))
+    expect_true(fit$converged)
+    expect_equal(coef(fit)[["c"]], exact$minimum, tolerance = 1e-4)
+    expect_equal(fit$cost, exact$objective, tolerance = 1e-7)
+})
+
+test_that("several parameters at bounds match nlminb() on box constrained problems", {
+    set.seed(7)
+    for (k in 1:12) {
+        n <- 60
+        z <- cbind(1, matrix(rnorm(3 * n), n, 3))
+        beta <- rnorm(4, sd = 2)
+        w <- drop(exp(0.2 * z %*% beta)) + rnorm(n, sd = 0.1)
+        res <- function(p) w - exp(0.2 * drop(z %*% p))
+        lo <- beta - runif(4, -0.5, 1)
+        up <- lo + runif(4, 0.5, 2)
+        start <- (lo + up) / 2
+        fit <- suppressWarnings(ceres_nls(res, start, lower = lo, upper = up, vcov = FALSE))
+        ref <- nlminb(start, function(p) 0.5 * sum(res(p)^2), lower = lo, upper = up)
+        expect_true(fit$converged, label = paste("problem", k))
+        expect_true(all(coef(fit) >= lo & coef(fit) <= up))
+        # no worse than the reference, and essentially the same
+        expect_lte(fit$cost, ref$objective * (1 + 1e-5))
+        expect_equal(fit$cost, ref$objective, tolerance = 1e-4, label = paste("problem", k))
+    }
+})
+
+test_that("a parameter leaving a bound is released", {
+    # the optimum of m is inside the bounds, but the path to it can touch one
+    fit <- suppressWarnings(ceres_nls(resid_exp, c(m = 0.5, c = -3), x = x, y = y,
+                                      upper = c(m = 0.5), lower = c(m = 0.1)))
+    tight <- ceres_nls(resid_exp, start, x = x, y = y)
+    expect_true(fit$converged)
+    expect_false(fit$at_bound[["m"]])
+    expect_equal(coef(fit), coef(tight), tolerance = 1e-4)
+})
+
+test_that("a parameter with lower == upper is fixed, not an estimate", {
+    fit <- ceres_nls(resid_exp, c(m = 0.25, c = 0), x = x, y = y,
+                     lower = c(m = 0.25), upper = c(m = 0.25))
+    expect_true(fit$converged)
     expect_equal(coef(fit)[["m"]], 0.25)
+    expect_equal(coef(fit)[["c"]], best_c(0.25, x, y), tolerance = 1e-5)
+    expect_true(fit$fixed[["m"]])
+    expect_false(fit$at_bound[["m"]])
+    expect_equal(df.residual(fit), 99)
+
+    # the same variance as the one-parameter model
+    one <- ceres_nls(function(p, x, y) y - exp(0.25 * x + p[["c"]]), c(c = 0), x = x, y = y)
+    expect_equal(vcov(fit)[["c", "c"]], vcov(one)[["c", "c"]], tolerance = 1e-4)
+    expect_equal(vcov(fit)[["m", "m"]], 0)
+    expect_output(print(summary(fit)), "Std. Error")
+
+    # starting away from the value, and with a fixed value that moves c
+    fit <- ceres_nls(resid_exp, c(m = 0.25, c = 2), x = x, y = y,
+                     lower = c(m = 0.25), upper = c(m = 0.25))
+    expect_equal(coef(fit)[["c"]], best_c(0.25, x, y), tolerance = 1e-5)
+})
+
+test_that("all parameters can be fixed", {
+    expect_message(
+        fit <- ceres_nls(resid_exp, c(m = 0.2, c = 0.1), x = x, y = y, lower = c(0.2, 0.1),
+                         upper = c(0.2, 0.1)),
+        "all parameters are fixed")
+    expect_true(fit$converged)
+    expect_equal(coef(fit), c(m = 0.2, c = 0.1))
+    expect_equal(fit$cost, 0.5 * sum(resid_exp(c(m = 0.2, c = 0.1), x, y)^2))
+    expect_null(vcov(fit))
+    expect_equal(df.residual(fit), 100)
+})
+
+test_that("a bounded problem with zero residuals converges", {
+    exact <- exp(0.2 * x + 0.1)
+    fit <- suppressWarnings(ceres_nls(function(p) exact - exp(p[["m"]] * x + p[["c"]]),
+                                      c(m = 0.1, c = 0), upper = c(m = 0.2)))
+    expect_true(fit$converged)
+    expect_equal(coef(fit), c(m = 0.2, c = 0.1), tolerance = 1e-6)
+})
+
+test_that("a bounded fit that runs out of iterations is not reported as converged", {
+    # Rosenbrock from the usual start needs far more steps than max_iter allows
+    rosenbrock <- function(p) c(10 * (p[2] - p[1]^2), 1 - p[1])
+    expect_warning(
+        fit <- ceres_nls(rosenbrock, c(-1.2, 1), lower = -5, upper = 5, vcov = FALSE,
+                         control = ceres_control(max_iter = 1)),
+        "did not converge")
+    expect_false(fit$converged)
+    expect_equal(fit$status, "NO_CONVERGENCE")
+    expect_lte(fit$cost, fit$initial_cost)
+
+    full <- ceres_nls(rosenbrock, c(-1.2, 1), lower = -5, upper = 5, vcov = FALSE)
+    expect_true(full$converged)
+    expect_equal(unname(coef(full)), c(1, 1), tolerance = 1e-5)
+})
+
+test_that("Ceres' stopping behaviour is unchanged without bounds", {
+    fit <- ceres_nls(resid_exp, start, x = x, y = y)
+    expect_equal(unique(fit$trace$stage), 1L)
+    expect_match(fit$message, "tolerance reached")
 })
 
 test_that("unnamed parameters work", {

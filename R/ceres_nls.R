@@ -1,7 +1,7 @@
 ## Non-linear least squares with residuals computed by an R function
 
-ceres_control <- function(max_iter = 50, function_tol = 1e-6, gradient_tol = 1e-10,
-                          parameter_tol = 1e-8, method = c("lm", "dogleg"),
+ceres_control <- function(max_iter = 50, function_tol = 1e-10, gradient_tol = 1e-10,
+                          parameter_tol = 1e-10, method = c("lm", "dogleg"),
                           diff = c("central", "forward"), trace = FALSE) {
     is_number <- function(x) is.numeric(x) && length(x) == 1L && is.finite(x)
     if (!is_number(max_iter) || max_iter < 1 || max_iter != round(max_iter)) {
@@ -98,8 +98,13 @@ ceres_nls <- function(fn, par, ..., jac = NULL, lower = -Inf, upper = Inf,
         J
     }
 
+    ## lower == upper fixes a parameter, so it is not an estimate
+    fixed <- lower == upper
+    n_estimated <- sum(!fixed)
+
     res <- ceres_nls_solve(fn_checked, jac_checked, start, m, lower, upper, loss,
-                           as.double(loss_scale), vcov && loss == "linear" && m > p,
+                           as.double(loss_scale),
+                           vcov && loss == "linear" && m > n_estimated && n_estimated > 0L,
                            unclass(control))
 
     estimate <- with_names(res$par)
@@ -118,20 +123,22 @@ ceres_nls <- function(fn, par, ..., jac = NULL, lower = -Inf, upper = Inf,
 
     at_bound <- abs(res$par - lower) <= 1e-8 * (1 + abs(res$par)) |
         abs(upper - res$par) <= 1e-8 * (1 + abs(res$par))
-    at_bound[!is.finite(lower) & !is.finite(upper)] <- FALSE
+    at_bound[(!is.finite(lower) & !is.finite(upper)) | fixed] <- FALSE
 
     vcov_matrix <- NULL
     if (vcov && !res$interrupted) {
         if (loss != "linear") {
             message("'vcov' is not available with a robust loss: the residual variance ",
                     "estimate assumes the linear loss")
-        } else if (m == p) {
+        } else if (n_estimated == 0L) {
+            message("'vcov' is not available: all parameters are fixed")
+        } else if (m == n_estimated) {
             message("'vcov' is not available: there are no residual degrees of freedom")
         } else if (is.null(res$unscaled_vcov)) {
             warning("'vcov' could not be computed; the Jacobian may be rank deficient",
                     call. = FALSE)
         } else {
-            vcov_matrix <- res$unscaled_vcov * rss / (m - p)
+            vcov_matrix <- res$unscaled_vcov * rss / (m - n_estimated)
             dimnames(vcov_matrix) <- list(par_names, par_names)
             if (any(at_bound)) {
                 warning("'vcov' is unreliable: parameter(s) ",
@@ -149,6 +156,7 @@ ceres_nls <- function(fn, par, ..., jac = NULL, lower = -Inf, upper = Inf,
              iterations = res$iterations,
              n_evals = c(fn = res$fn_calls + 1L, jac = res$jac_calls),
              time = res$time, trace = res$trace, at_bound = with_names(at_bound),
+             fixed = with_names(fixed),
              loss = loss, loss_scale = loss_scale, n = m, call = call),
         class = "ceres_nls")
 }
@@ -161,7 +169,7 @@ vcov.ceres_nls <- function(object, ...) object$vcov
 
 deviance.ceres_nls <- function(object, ...) object$rss
 
-df.residual.ceres_nls <- function(object, ...) object$n - length(object$par)
+df.residual.ceres_nls <- function(object, ...) object$n - sum(!object$fixed)
 
 print.ceres_nls <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
     cat("Non-linear least squares fit by Ceres Solver\n\n")
@@ -178,7 +186,7 @@ summary.ceres_nls <- function(object, ...) {
     df <- df.residual(object)
     coefficients <- if (!is.null(object$vcov)) {
         se <- sqrt(diag(object$vcov))
-        tval <- est / se
+        tval <- ifelse(object$fixed, NA_real_, est / se)
         cbind(Estimate = est, `Std. Error` = se, `t value` = tval,
               `Pr(>|t|)` = 2 * stats::pt(abs(tval), df, lower.tail = FALSE))
     } else {

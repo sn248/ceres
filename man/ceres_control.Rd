@@ -4,16 +4,19 @@
   Solver options for ceres_nls
 }
 \description{
-  Options for \code{\link{ceres_nls}}. The defaults of the iteration limit and
-  tolerances are those of Ceres Solver.
+  Options for \code{\link{ceres_nls}}. The defaults of \code{function_tol} and
+  \code{parameter_tol} are tighter than those of Ceres Solver (\code{1e-6} and
+  \code{1e-8}), which can stop noticeably short of the solution. The other
+  defaults are those of Ceres Solver.
 }
 \usage{
-ceres_control(max_iter = 50, function_tol = 1e-6, gradient_tol = 1e-10,
-              parameter_tol = 1e-8, method = c("lm", "dogleg"),
+ceres_control(max_iter = 50, function_tol = 1e-10, gradient_tol = 1e-10,
+              parameter_tol = 1e-10, method = c("lm", "dogleg"),
               diff = c("central", "forward"), trace = FALSE)
 }
 \arguments{
-  \item{max_iter}{the maximum number of iterations.}
+  \item{max_iter}{the maximum number of iterations of each solve. A fit with
+    parameters at a bound can have several, see \code{\link{ceres_nls}}.}
   \item{function_tol}{stop when the relative change in the cost is below this.}
   \item{gradient_tol}{stop when the largest gradient element is below this.}
   \item{parameter_tol}{stop when the relative step size is below this.}

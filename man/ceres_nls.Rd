@@ -45,7 +45,8 @@ ceres_nls(fn, par, ..., jac = NULL, lower = -Inf, upper = Inf,
     never evaluate \code{fn} outside the bounds.}
   \item{lower, upper}{bounds on the parameters: a single value, a vector with
     one value per parameter, or a vector named by some of the parameters,
-    in which case the others are unbounded.}
+    in which case the others are unbounded. A parameter with equal lower and
+    upper bounds is fixed at that value and is not counted as an estimate.}
   \item{loss}{the loss function \eqn{\rho}{rho}, applied to each residual.
     With \code{"linear"} this is ordinary least squares. The others reduce
     the influence of outliers, see \sQuote{Details}.}
@@ -71,6 +72,15 @@ ceres_nls(fn, par, ..., jac = NULL, lower = -Inf, upper = Inf,
     \code{"tukey"} \tab \eqn{\frac{a^2}{3}(1 - (1 - s/a^2)^3)}{a^2 / 3 (1 - (1 - s / a^2)^3)} for \eqn{s \le a^2}{s <= a^2}, otherwise \eqn{a^2/3}{a^2 / 3}
   }
 
+  With a parameter at a bound, Ceres Solver alone can stop while the other
+  parameters are far from their optimum, and report convergence. So
+  parameters pushed against a bound are held there and the others solved
+  again, in stages, releasing any that the gradient pulls back inside.
+  \code{max_iter} applies to each stage. A bounded fit is reported as converged
+  only if a Gauss-Newton step in the free parameters is predicted to reduce the
+  objective by a negligible amount, relative to the objective. This takes more
+  calls of \code{fn} than an unbounded fit.
+
   The covariance matrix is
   \eqn{\hat\sigma^2 (J^\top J)^{-1}}{sigma^2 (J'J)^-1} with
   \eqn{\hat\sigma^2}{sigma^2} the residual sum of squares divided by the
@@ -90,9 +100,9 @@ ceres_nls(fn, par, ..., jac = NULL, lower = -Inf, upper = Inf,
   \code{jac}, there is a warning and the result has the best point found so
   far.
 
-  The default tolerances of \code{\link{ceres_control}} can stop the solver
-  earlier than \code{\link[stats]{nls}} would. For more accurate estimates,
-  use smaller values of \code{function_tol} and \code{parameter_tol}.
+  For more accurate estimates, or fewer calls of \code{fn}, change
+  \code{function_tol} and \code{parameter_tol} in
+  \code{\link{ceres_control}}.
 }
 \value{
   \code{ceres_nls()} returns a list of class \code{"ceres_nls"} with
@@ -108,8 +118,11 @@ ceres_nls(fn, par, ..., jac = NULL, lower = -Inf, upper = Inf,
   \item{iterations}{the number of iterations.}
   \item{n_evals}{the number of calls of \code{fn} and \code{jac}.}
   \item{time}{the time spent in the solver, in seconds.}
-  \item{trace}{a data frame with one row per iteration.}
-  \item{at_bound}{a logical vector, \code{TRUE} for parameters at a bound.}
+  \item{trace}{a data frame with one row per iteration, with the stage it
+    belongs to. Only bounded fits can have more than one stage.}
+  \item{at_bound}{a logical vector, \code{TRUE} for estimated parameters at a
+    bound.}
+  \item{fixed}{a logical vector, \code{TRUE} for parameters with equal bounds.}
   \item{loss, loss_scale, n, call}{the loss function and its scale, the number
     of residuals and the call.}
 }
