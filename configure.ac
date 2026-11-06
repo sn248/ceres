@@ -4,7 +4,7 @@
 ##
 ##  ceres -- R interface to ceres-solver
 ##
-##  Copyright (C) 2022  Satyaprakash Nayak
+##  Copyright (C) 2022-2026  Satyaprakash Nayak
 ##
 ## This file is licensed under the GPL-2 or later just like most of my
 ## Open Source code, and is granted an exemption (should it be needed)
@@ -12,7 +12,7 @@
 
 # require at least autoconf 2.69
 AC_PREREQ([2.69])
-AC_INIT([ceres],[0.0.1])
+AC_INIT([ceres],[0.1.0])
 
 ## Set R_HOME, respecting an environment variable if set
 : ${R_HOME=$(R RHOME)}
@@ -33,30 +33,6 @@ AC_PROG_CXX
 
 ## Default to build from source
 need_to_build="yes"
-
-##### But: Can we use pkg-config?
-###AC_PATH_PROG(have_pkg_config, pkg-config, no)
-##### If yes, also check for whether pkg-config knows nlopt
-###if test x"${have_pkg_config}" != x"no"; then
-###    AC_MSG_CHECKING([if pkg-config knows NLopt])
-###    if pkg-config --exists nlopt; then
-###        AC_MSG_RESULT([yes])
-###        ## Since nlopt has been found, test for minimal version requirement
-###        AC_MSG_CHECKING([for pkg-config checking NLopt version])
-###        if pkg-config --atleast-version=2.7.0 nlopt; then
-###            AC_MSG_RESULT([>= 2.7.0])
-###            nlopt_include=$(pkg-config --cflags nlopt)
-###            nlopt_libs=$(pkg-config --libs nlopt)
-###            AC_SUBST([NLOPT_INCLUDE], "${nlopt_include}")
-###            AC_SUBST([NLOPT_LIBS],    "${nlopt_libs}")
-###            need_to_build="no"
-###        else
-###            AC_MSG_RESULT([insufficient: NLopt 2.7.0 or later is preferred.])
-###        fi
-###    else
-###        AC_MSG_RESULT([no])
-###    fi
-###fi
 
 ## So do we need to build
 if test x"${need_to_build}" != x"no"; then

@@ -39,9 +39,12 @@ PKG_LIBS = $(shell "${R_HOME}/bin/Rscript" -e "ceres::LdFlags()")
 \examples{
 CxxFlags()
 LdFlags()
-\dontrun{
-Rcpp::sourceCpp(system.file("examples", "curve_fitting.cpp",
-                            package = "ceres"))
+\donttest{
+if (requireNamespace("RcppEigen", quietly = TRUE)) {
+  Rcpp::sourceCpp(system.file("examples", "curve_fitting.cpp",
+                              package = "ceres"),
+                  env = new.env())
+}
 }
 }
 \keyword{ programming }

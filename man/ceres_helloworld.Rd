@@ -17,8 +17,7 @@ ceres_helloworld(x)
   \item{x}{a number, the initial value of the parameter.}
 }
 \value{
-  \code{0}, invisibly returned by the C++ code; the function is called
-  for its printed output.
+  The integer \code{0}; the function is called for its printed output.
 }
 \references{
   \url{https://github.com/ceres-solver/ceres-solver/blob/2.2.0/docs/source/nnls_tutorial.rst}

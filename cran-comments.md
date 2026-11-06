@@ -1,6 +1,12 @@
 ## Test environments
 
-* local Ubuntu 26.04, R 4.6.1, GCC 15.2.0
+* local Ubuntu 26.04, R 4.6.1, GCC 15.2.0, RcppEigen 0.3.4.0.2 (Eigen 3.4.0)
+
+The package also installs and its tests pass against the development version
+of RcppEigen (0.4.9.9-5, Eigen 5.0.1). With that version, R CMD check gives a
+WARNING for two compiler warnings in the bundled Ceres sources
+(-Wdeprecated-declarations and -Wstringop-overflow); neither occurs with the
+current CRAN version.
 
 ## R CMD check results
 
@@ -41,8 +47,10 @@ removes a large amount of template-generated code. About 115 C++ files are
 compiled.
 
 Even so, installation is slower than for most packages: on the test machine
-it took 460s of CPU time (233s elapsed with 8 parallel make jobs). Most of
-this is compiling Ceres itself, which is heavily templated and uses Eigen.
+it took 192s of CPU time (95s elapsed; the build uses at most 2 parallel make
+jobs). Most of this is compiling Ceres itself, which is heavily templated and
+uses Eigen. The whole of R CMD check --as-cran took 271s of CPU time (175s
+elapsed).
 
 The installed size is about 11.3Mb, of which 6.7Mb is the static library
 lib/libceres.a. It is installed so that other packages can link to Ceres
@@ -51,3 +59,10 @@ package.
 
 Tests that compile the example files with Rcpp::sourceCpp() are skipped on
 CRAN to keep the check time down; only the precompiled example runs there.
+
+## Bundled code
+
+The copyright holders and licenses of the bundled Ceres Solver sources (BSD
+3-clause, with some files under Apache 2.0 or MIT), and the changes made to
+them, are listed in inst/COPYRIGHTS. tools/trim_ceres.sh reproduces the bundled
+tarball from the upstream release.

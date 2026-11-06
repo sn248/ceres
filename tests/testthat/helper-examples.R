@@ -3,6 +3,7 @@
 # these tests do not run on CRAN.
 source_example <- function(file) {
     skip_on_cran()
+    skip_if_not_installed("RcppEigen")
     path <- system.file("examples", file, package = "ceres")
     if (!nzchar(path)) stop("example not found: ", file)
     env <- new.env()

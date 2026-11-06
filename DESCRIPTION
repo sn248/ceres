@@ -2,14 +2,32 @@ Package: ceres
 Type: Package
 Title: An Interface to 'Ceres Solver' for Non-Linear Least Squares and Optimization
 Version: 0.1.0
-Date: 2026-10-21
+Date: 2026-11-06
 Authors@R: c(
     person("Satyaprakash", "Nayak", role = c("aut", "cre"),
            email = "satyaprakash.nayak@gmail.com"),
     person("Google Inc.", role = "cph",
            comment = "Ceres Solver, bundled in src/ceres-solver-2.2.0.tar.gz"),
-    person("Ceres Solver authors", role = "ctb",
-           comment = "Ceres Solver, bundled in src/ceres-solver-2.2.0.tar.gz"))
+    person("Sameer", "Agarwal", role = "ctb",
+           comment = "Ceres Solver"),
+    person("Keir", "Mierle", role = "ctb",
+           comment = "Ceres Solver"),
+    person("The Ceres Solver authors", role = "ctb",
+           comment = "Ceres Solver; see inst/COPYRIGHTS"),
+    person("The Abseil Authors", role = "cph",
+           comment = "fixed_array.h and memory.h in Ceres Solver (Apache-2.0)"),
+    person("Sergiu", "Deitsch", role = "cph",
+           comment = "FindMETIS.cmake in Ceres Solver (MIT)"),
+    person("Bogdan", "Cristea", role = "cph",
+           comment = "iOS.cmake in Ceres Solver (BSD-3-Clause)"),
+    person("LTE Engineering Software", role = "cph",
+           comment = "iOS.cmake in Ceres Solver (BSD-3-Clause)"),
+    person("Kitware, Inc.", role = "cph",
+           comment = "iOS.cmake in Ceres Solver (BSD-3-Clause)"),
+    person("Insight Software Consortium", role = "cph",
+           comment = "iOS.cmake in Ceres Solver (BSD-3-Clause)"),
+    person("Ken Martin, Will Schroeder and Bill Lorensen", role = "cph",
+           comment = "FindTBB.cmake in Ceres Solver, from VTK (BSD-3-Clause)"))
 Description: Provides an interface to the 'Ceres Solver' C++ library
     <https://github.com/ceres-solver/ceres-solver>. 'Ceres Solver' is an open
     source library for modeling and solving large, complicated optimization
@@ -20,15 +38,15 @@ Description: Provides an interface to the 'Ceres Solver' C++ library
     and can be used from R through 'Rcpp', either with Rcpp::sourceCpp() or
     from other packages.
 License: GPL (>= 2)
-Copyright: The bundled 'Ceres Solver' sources are Copyright 2023 Google Inc.
-    and distributed under the BSD 3-clause license; see the LICENSE file in
-    src/ceres-solver-2.2.0.tar.gz.
+Copyright: See the file inst/COPYRIGHTS for the copyright holders and licenses
+    of the bundled 'Ceres Solver' sources.
 SystemRequirements: cmake (>= 3.16), GNU make
 Biarch: true
 Encoding: UTF-8
 Imports: 
     Rcpp
-Suggests: 
+Suggests:
+    RcppEigen,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 LinkingTo: Rcpp, RcppEigen
