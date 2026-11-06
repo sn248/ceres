@@ -35,7 +35,8 @@ Maintainer: Satyaprakash Nayak <satyaprakash.nayak@gmail.com>
 }
 \keyword{ package }
 \seealso{
-  \code{\link{ceres_helloworld}}, \code{\link{CxxFlags}}
+  \code{\link{ceres_nls}}, \code{\link{ceres_helloworld}},
+  \code{\link{CxxFlags}}
 }
 \examples{
 ceres_helloworld(0.5)

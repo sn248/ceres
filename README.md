@@ -9,7 +9,33 @@
 devtools::install_github('sn248/ceres')
 ```
 
-## How to use `ceres`
+## Fitting a model from `R`
+`ceres_nls()` solves non-linear least squares problems with the residuals written as an `R` function, with optional bounds and robust loss functions. No `C++` is needed.
+
+```R
+library(ceres)
+
+set.seed(1)
+x <- seq(0, 5, length.out = 100)
+y <- exp(0.3 * x + 0.1) + rnorm(100, sd = 0.2)
+y[c(20, 60)] <- y[c(20, 60)] + 10   # two outliers
+
+resid_exp <- function(p, x, y) y - exp(p[["m"]] * x + p[["c"]])
+
+# Ordinary least squares, with standard errors
+fit <- ceres_nls(resid_exp, c(m = 0, c = 0), x = x, y = y)
+summary(fit)
+
+# A robust loss, with m constrained to be positive
+robust <- ceres_nls(resid_exp, c(m = 0.2, c = 0), x = x, y = y,
+                    lower = c(m = 0), loss = "cauchy", loss_scale = 0.5,
+                    vcov = FALSE)
+coef(robust)
+```
+
+See `?ceres_nls` for the details. `R` is called for every evaluation, so for large problems write the residuals in `C++` as described below.
+
+## How to use `ceres` from `C++`
 Following the example provided by [Ceres Solver](https://github.com/ceres-solver/ceres-solver), let's solve the simple optimization problem of finding the minima of the function
 $$ f(x) = 0.5 \times (10 - x)^{2}$$
 The minima of this function is 0 (at $x = 10$).

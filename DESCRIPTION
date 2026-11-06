@@ -34,9 +34,11 @@ Description: Provides an interface to the 'Ceres Solver' C++ library
     problems. It can solve non-linear least squares problems with bounds
     constraints and general unconstrained optimization problems. It is a
     mature, feature rich and high-performance library that has been used in
-    production at Google since 2010. The bundled library is built from source
-    and can be used from R through 'Rcpp', either with Rcpp::sourceCpp() or
-    from other packages.
+    production at Google since 2010. Non-linear least squares problems with
+    residuals written in R can be solved with ceres_nls(), with optional
+    bounds and robust loss functions. The bundled library is built from source
+    and can also be used from C++ through 'Rcpp', either with Rcpp::sourceCpp()
+    or from other packages.
 License: GPL (>= 3)
 Copyright: See the file inst/COPYRIGHTS for the copyright holders and licenses
     of the bundled 'Ceres Solver' sources.
@@ -44,7 +46,8 @@ SystemRequirements: cmake (>= 3.16), GNU make
 Biarch: true
 Encoding: UTF-8
 Imports: 
-    Rcpp
+    Rcpp,
+    stats
 Suggests:
     RcppEigen,
     testthat (>= 3.0.0)

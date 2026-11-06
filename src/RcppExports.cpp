@@ -23,9 +23,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ceres_nls_solve
+Rcpp::List ceres_nls_solve(Rcpp::Function fn, Rcpp::Nullable<Rcpp::Function> jac, Rcpp::NumericVector par, int m, Rcpp::NumericVector lower, Rcpp::NumericVector upper, std::string loss, double loss_scale, bool compute_vcov, Rcpp::List control);
+RcppExport SEXP _ceres_ceres_nls_solve(SEXP fnSEXP, SEXP jacSEXP, SEXP parSEXP, SEXP mSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP lossSEXP, SEXP loss_scaleSEXP, SEXP compute_vcovSEXP, SEXP controlSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::Function >::type fn(fnSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::Function> >::type jac(jacSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type par(parSEXP);
+    Rcpp::traits::input_parameter< int >::type m(mSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< std::string >::type loss(lossSEXP);
+    Rcpp::traits::input_parameter< double >::type loss_scale(loss_scaleSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_vcov(compute_vcovSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type control(controlSEXP);
+    rcpp_result_gen = Rcpp::wrap(ceres_nls_solve(fn, jac, par, m, lower, upper, loss, loss_scale, compute_vcov, control));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_ceres_ceres_helloworld", (DL_FUNC) &_ceres_ceres_helloworld, 1},
+    {"_ceres_ceres_nls_solve", (DL_FUNC) &_ceres_ceres_nls_solve, 10},
     {NULL, NULL, 0}
 };
 
