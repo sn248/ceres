@@ -8,20 +8,35 @@ jac_exp <- function(p, x, y) {
 }
 start <- c(m = 0, c = 0)
 
+test_that("ceres_nls() matches lm() exactly on a linear model", {
+    # lm() does not iterate, so this reference does not depend on a tolerance
+    fit <- ceres_nls(function(p, x, y) y - p[["a"]] - p[["b"]] * x, c(a = 0, b = 0),
+                     x = x, y = y,
+                     control = ceres_control(function_tol = 1e-14, parameter_tol = 1e-14))
+    ref <- lm(y ~ x)
+
+    expect_true(fit$converged)
+    expect_equal(unname(coef(fit)), unname(coef(ref)), tolerance = 1e-8)
+    expect_equal(deviance(fit), deviance(ref), tolerance = 1e-8)
+    expect_equal(df.residual(fit), df.residual(ref))
+    expect_equal(unname(residuals(fit)), unname(residuals(ref)), tolerance = 1e-6)
+    expect_equal(unname(vcov(fit)), unname(vcov(ref)), tolerance = 1e-7)
+})
+
 test_that("ceres_nls() matches nls() on clean data", {
     tight <- ceres_control(function_tol = 1e-12, parameter_tol = 1e-12)
     fit <- ceres_nls(resid_exp, start, x = x, y = y, control = tight)
-    ref <- nls(y ~ exp(m * x + c), start = list(m = 0.2, c = 0),
-               control = nls.control(tol = 1e-8, minFactor = 1e-12))
+    # default nls() settings: tighter ones fail to converge on some platforms
+    ref <- nls(y ~ exp(m * x + c), start = list(m = 0.2, c = 0))
 
     expect_true(fit$converged)
     expect_s3_class(fit, "ceres_nls")
     expect_named(coef(fit), c("m", "c"))
-    expect_equal(coef(fit), coef(ref), tolerance = 1e-6)
-    expect_equal(deviance(fit), deviance(ref), tolerance = 1e-8)
+    expect_equal(coef(fit), coef(ref), tolerance = 1e-4)
+    expect_equal(deviance(fit), deviance(ref), tolerance = 1e-6)
     expect_equal(df.residual(fit), df.residual(ref))
-    expect_equal(unname(residuals(fit)), as.numeric(residuals(ref)), tolerance = 1e-6)
-    expect_equal(vcov(fit), vcov(ref), tolerance = 1e-5)
+    expect_equal(unname(residuals(fit)), as.numeric(residuals(ref)), tolerance = 1e-3)
+    expect_equal(vcov(fit), vcov(ref), tolerance = 1e-3)
     expect_equal(dim(fit$jacobian), c(100L, 2L))
     expect_s3_class(fit$trace, "data.frame")
     expect_gt(nrow(fit$trace), 1)
