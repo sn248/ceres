@@ -1,3 +1,15 @@
 useDynLib(ceres, .registration=TRUE)
-exportPattern("^[[:alpha:]]+")
 importFrom(Rcpp, evalCpp)
+importFrom(stats, coef, deviance, df.residual, residuals, vcov)
+
+export(ceres_helloworld, ceres_nls, ceres_control)
+export(CxxFlags, LdFlags, inlineCxxPlugin)
+
+S3method(coef, ceres_nls)
+S3method(residuals, ceres_nls)
+S3method(vcov, ceres_nls)
+S3method(deviance, ceres_nls)
+S3method(df.residual, ceres_nls)
+S3method(print, ceres_nls)
+S3method(summary, ceres_nls)
+S3method(print, summary.ceres_nls)

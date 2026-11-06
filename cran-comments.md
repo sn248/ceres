@@ -48,18 +48,18 @@ removes a large amount of template-generated code. About 115 C++ files are
 compiled.
 
 Even so, installation is slower than for most packages: on the test machine
-it took 192s of CPU time (95s elapsed; the build uses at most 2 parallel make
+it took 186s of CPU time (94s elapsed; the build uses at most 2 parallel make
 jobs). Most of this is compiling Ceres itself, which is heavily templated and
-uses Eigen. The whole of R CMD check --as-cran took 271s of CPU time (175s
-elapsed).
+uses Eigen. The whole of R CMD check --as-cran took 268s of CPU time.
 
-The installed size is about 11.3Mb, of which 6.7Mb is the static library
+The installed size is about 13.4Mb, of which 6.7Mb is the static library
 lib/libceres.a. It is installed so that other packages can link to Ceres
 through the LinkingTo/LdFlags() mechanism, which is the purpose of the
 package.
 
 Tests that compile the example files with Rcpp::sourceCpp() are skipped on
-CRAN to keep the check time down; only the precompiled example runs there.
+CRAN to keep the check time down. The tests of ceres_nls() and of the
+precompiled example do not compile anything, and run there.
 
 ## Bundled code
 

@@ -5,3 +5,7 @@ ceres_helloworld <- function(x) {
     .Call(`_ceres_ceres_helloworld`, x)
 }
 
+ceres_nls_solve <- function(fn, jac, par, m, lower, upper, loss, loss_scale, compute_vcov, control) {
+    .Call(`_ceres_ceres_nls_solve`, fn, jac, par, m, lower, upper, loss, loss_scale, compute_vcov, control)
+}
+
