@@ -1,7 +1,9 @@
 ## Test environments
 
 * local Ubuntu 26.04, R 4.6.1, GCC 15.2.0, RcppEigen 0.3.4.0.2 (Eigen 3.4.0)
-* Windows: TODO, add the result of the win-builder check before submitting
+* win-builder: 0 errors | 0 warnings | 1 note (new submission)
+* GitHub Actions (macos-latest, windows-latest, ubuntu-latest): R CMD check
+  --as-cran, Status: OK
 
 The package also installs and its tests pass against the development version
 of RcppEigen (0.4.9.9-5, Eigen 5.0.1). With that version, R CMD check gives a
