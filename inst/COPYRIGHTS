@@ -62,6 +62,10 @@ Patched, all under internal/ceres:
   - preconditioner.h: reordered initializers, fixing -Wreorder.
   - reorder_program.cc, gradient_checking_cost_function.cc, parameter_block.h,
     problem_impl.cc, program.cc: format arguments, fixing -Wformat.
+  - covariance_impl.cc: with Eigen >= 3.4.90 (including Eigen 5), passes the
+    BDCSVD options as a template parameter, fixing -Wdeprecated-declarations.
+  - reorder_program.cc: copies the fill-reducing permutation with an Eigen
+    assignment instead of a loop, fixing a -Wstringop-overflow false positive.
   - Files that use fixed-width integer types without including <cstdint> now
     include it.
 

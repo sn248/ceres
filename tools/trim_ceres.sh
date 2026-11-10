@@ -97,6 +97,22 @@ perl -0pi -e "
   s{(\"\\\\nParameter block values: \",\n\s*)parameters,}{\$1${V}(parameters),}g;
 " program.cc
 
+## Warnings that R CMD check reports as significant with Eigen 5
+## (RcppEigen >= 0.4.9):
+## -Wdeprecated-declarations: BDCSVD takes its computation options as a
+## template parameter; the constructor argument is deprecated. Eigen 5 uses
+## semver in EIGEN_VERSION_AT_LEAST, Eigen 3.x WORLD.MAJOR.MINOR, so
+## (3, 4, 90) is false for 3.4.0 and true for 3.4.90 (dev) and 5.x.
+perl -0pi -e '
+  s{(\n)(  Eigen::BDCSVD<Matrix> svd\(dense_jacobian,\n\s*Eigen::ComputeThinU \| Eigen::ComputeThinV\);\n)}{$1#if EIGEN_VERSION_AT_LEAST(3, 4, 90)\n  // Eigen 5 deprecates passing the computation options to the constructor\n  Eigen::BDCSVD<Matrix, Eigen::ComputeThinU | Eigen::ComputeThinV> svd(\n      dense_jacobian);\n#else\n$2#endif\n};
+' covariance_impl.cc
+## -Wstringop-overflow (GCC 15): the element-wise copy of the permutation
+## is turned into a memcpy that GCC wrongly thinks can overflow; an Eigen
+## assignment does the same copy without the warning
+perl -0pi -e '
+  s{  for \(int i = 0; i < block_hessian\.rows\(\); \+\+i\) \{\n    ordering\[i\] = perm\.indices\(\)\[i\];\n  \}}{  Eigen::Map<Eigen::VectorXi>(ordering, perm.indices().size()) = perm.indices();};
+' reorder_program.cc
+
 ## Fail loudly if upstream changed and a patch no longer applies
 test `grep -Fc "${V}" gradient_checking_cost_function.cc` -eq 1
 test `grep -Fc "${V}" parameter_block.h` -eq 3
@@ -113,6 +129,8 @@ grep -q 'Rprintf("%s\\n", summary.FullReport().c_str());' c_api.cc
 grep -A1 'num_threads(linear_solver_options.num_threads),' preconditioner.h | \
     grep -q 'elimination_groups(linear_solver_options.elimination_groups),'
 grep -q 'static_cast<int>(first_elimination_group.size())' reorder_program.cc
+grep -q 'Eigen::BDCSVD<Matrix, Eigen::ComputeThinU | Eigen::ComputeThinV> svd(' covariance_impl.cc
+grep -q 'Eigen::Map<Eigen::VectorXi>(ordering, perm.indices().size()) = perm.indices();' reorder_program.cc
 if grep -n '%z' *.cc *.h; then
     echo "trim_ceres.sh: %z format left (see above)" >&2
     exit 1

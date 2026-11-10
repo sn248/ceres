@@ -6,10 +6,9 @@
   --as-cran, Status: OK
 
 The package also installs and its tests pass against the development version
-of RcppEigen (0.4.9.9-5, Eigen 5.0.1). With that version, R CMD check gives a
-WARNING for two compiler warnings in the bundled Ceres sources
-(-Wdeprecated-declarations and -Wstringop-overflow); neither occurs with the
-current CRAN version.
+of RcppEigen (0.4.9.9-5, Eigen 5.0.1), with the same R CMD check results as
+below. The bundled Ceres sources are patched so that they compile without
+significant warnings with both Eigen 3.4.0 and Eigen 5.
 
 ## R CMD check results
 
